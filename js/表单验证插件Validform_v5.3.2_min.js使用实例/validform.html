@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单验证插件</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+<script src="js/jquery-1.11.3.min.js"></script>
+<form class="loan_form">
+    <em class="ytip"></em>
+    <div class="input_line clearfix">
+        <label>姓名</label>
+        <input type="text" class="inputext" tipmsg="姓名" datatype="name" nullmsg="请输入您的姓名！" errormsg="请输入正确的姓名！" maxlength="5" name="name" id="name" value="" autocomplete="off">
+        <em class="loan_tips ytip1"></em>
+    </div>
+    <div class="input_line clearfix">
+        <label>手机</label>
+        <input type="text" class="inputext" tipmsg="手机" datatype="phone" nullmsg="请输入您的手机号！" errormsg="请输入正确的手机号！" maxlength="11" name="phone" id="phone" value="" autocomplete="off">
+        <em class="loan_tips ytip2"></em>
+    </div>
+    <div class="input_line clearfix">
+        <label>所在城市</label>
+        <select id="province" class="mr_10" datatype="*" nullmsg="请选择您的所在城市！" autocomplete="off" onChange="getCityName()">
+            <option value="" selected="selected">请选择省</option>
+        </select>
+        <select name="city" id="city" autocomplete="off" datatype="*" nullmsg="请选择您的所在城市！">
+            <option value="" selected="selected">请选择市</option>
+        </select>
+        <em class="loan_tips ytip3"></em>
+    </div>
+    <div class="input_line clearfix">
+        <label>预借现金</label>
+        <select class="wid_302" name="amount" id="amount" datatype="*" nullmsg="请选择您的预借额度！" autocomplete="off">
+            <option value="" selected="selected">请选择</option>
+            <option value="1万-10万">1万-10万</option>
+            <option value="10万-100万">10万-100万</option>
+            <option value="100万-500万">100万-500万</option>
+            <option value="500万-1000万">500万-1000万</option>
+            <option value="1000万以上">1000万以上</option>
+        </select>
+        <em class="loan_tips ytip4"></em>
+    </div>
+    <div class="apply_btn">
+        <input id="applyBtn" type="submit" value="提交申请"/>
+    </div>
+</form>
+<script src="js/cityData.js"></script>
+<script src="js/Validform_v5.3.2_min.js"></script>
+<script>
+    //省市名称添加
+    var provinceDom = document.getElementById("province");
+    var cityDom = document.getElementById("city");
+    function addProvince() {
+        var provinceCon = "";
+        for (var j = 0; j < provinceList.length; j++) {
+            provinceCon += '<option value="'+provinceList[j]+'">' + provinceList[j] + '</option>';
+        }
+        provinceDom.innerHTML = provinceDom.innerHTML + provinceCon;
+    }
+    addProvince();
+    function getCityName() {
+        var cityData = cityList[provinceDom.selectedIndex - 1];
+        cityDom.length = 1;
+        if(provinceDom.selectedIndex>0){
+            for (var i = 0; i < cityData.length; i++) {
+                cityDom[i + 1] = new Option(cityData[i], cityData[i]);
+            }
+        }
+    }
+    $(".btn").click(function () {
+        console.log($("#province").val())
+        console.log($("#city").val())
+    })
+    /*http://www.jb51.net/article/35205.htm   js动态添加和删除option*/
+
+
+    //表单验证与提交
+    var demo=$(".loan_form").Validform({
+        tiptype:function(msg,o,cssctl){//提示信息的显示与隐藏
+            if(o.type==3){
+                o.obj.parent().find(".loan_tips").html(msg);
+            }else if(o.type==2){
+                o.obj.parent().find(".loan_tips").empty();
+            }
+        },
+        showAllError:false,//提交表单时，错误信息是否一次性展示
+        datatype:{//正则定义
+            "name": /^[\u4E00-\u9FA5]+$/,
+            "phone":/^(((13[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/
+        },
+        ajaxPost:true
+    });
+    $("#applyBtn").click(function(){
+        var name=$("#name").val();//姓名
+        var phone=$("#phone").val();//手机号
+        var city=$("#city").val();//所在城市
+        var amount=$("#amount").val();//预借现金
+        demo.config({
+            ajaxpost:{
+                url:"${rc.getContextPath()}/loan/loan_apply.do",
+                type:"post",
+                data:{
+                    name:name,
+                    phone:phone,
+                    address:city,
+                    amount:amount
+                },
+                success:function(data){
+                    console.log(data);
+                    if(data.code==0){
+                        alert("提交成功！");
+                        setTimeout(function(){
+                            window.location.reload();
+                        },2000);
+                    }else{
+                        $(".ytip").show();
+                        $(".ytip").html("请勿重复提交！");
+                    }
+                },
+                error: function (data) {
+                    alert("请求超时，请重试！");
+                }
+            }
+        });
+    });
+    //修改表单信息时，重复提交提示语消失
+    $("input").focus(function(){
+        $(".ytip").hide();
+    });
+</script>
+</body>
+</html>

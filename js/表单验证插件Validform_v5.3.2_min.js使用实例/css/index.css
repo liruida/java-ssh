@@ -1,0 +1,10 @@
+.loan_form{ position: relative; width:800px; margin:30px auto;}
+.input_line{ position: relative; width: 392px; padding-bottom: 24px; font-size: 14px;}
+.input_line label{ float:left;  width:70px; line-height: 49px; text-align:right; margin-right: 20px;}
+.input_line input,.input_line select{ float: left; width:280px; height: 47px; line-height: 47px; border:1px solid #e4e4e4; border-radius: 2px; padding:0 10px; color: #333;}
+.input_line select{ width:146px; height:49px; line-height: 49px; background: url(../images/loan_arrow.png) no-repeat right center; padding-right:0; -webkit-appearance: none;  -moz-appearance: none; -ms-appearance: none; -o-appearance: none; appearance: none;}
+.input_line .wid_302{ width: 302px;}
+.input_line .mr_10{ margin-right: 10px;}
+.apply_btn input{ width: 302px; height: 49px; border-radius: 2px; font-size: 16px; color: #fff; background: #6c54b6; margin-left: 90px; cursor: pointer;}
+.loan_tips{ position:absolute; left:90px; bottom:3px; color:#ed1a1a; font-style: normal;}
+.ytip{ position:absolute; left:90px; top:-20px; color:#ed1a1a; font-size:14px; font-style: normal;}
