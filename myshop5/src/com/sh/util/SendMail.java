@@ -25,7 +25,7 @@ public class SendMail {
 	props.put("mail.smtp.auth", "true");
 	Session session = Session.getInstance(props, new Authenticator() {
 		public PasswordAuthentication getPasswordAuthentication() { 
-			return new PasswordAuthentication("rfengtianxiaoxu", "niu12345");/*此处的‘密码’应当是163邮箱的授权码*/
+			return new PasswordAuthentication("rfengtianxiaoxu", "*************");/*此处的‘密码’应当是163邮箱的授权码*/
 		}
 	});
 	Message msg = new MimeMessage(session);
